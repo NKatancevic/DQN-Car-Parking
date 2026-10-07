@@ -13,13 +13,7 @@ class ParkingLotV2:
 
     def __init__(self, start_level=0):
 
-        # ====================================================
-        # START LEVEL
-        #
-        # 0 = potpuno isti start
-        # 1 = mala randomizacija
-        # 2 = veca randomizacija
-        # ====================================================
+
 
         self.start_level = start_level
 
@@ -42,20 +36,11 @@ class ParkingLotV2:
         self.previous_outside_error = 0.0
         self.previous_corners_inside = 0
 
-        # ====================================================
-        # NOVI PARKING
-        #
-        # 3 mesta LEVO
-        # 3 mesta DESNO
-        # 2 mesta GORE
-        #
-        # Ukupno 8.
-        # Jedno je random target, ostala su zauzeta.
-        # ====================================================
+
 
         self.parking_slots = [
 
-            # LEVO
+
             pygame.Rect(
                 50,
                 100,
@@ -77,7 +62,7 @@ class ParkingLotV2:
                 70
             ),
 
-            # DESNO
+
             pygame.Rect(
                 720,
                 100,
@@ -99,7 +84,7 @@ class ParkingLotV2:
                 70
             ),
 
-            # GORE
+
             pygame.Rect(
                 290,
                 40,
@@ -118,9 +103,7 @@ class ParkingLotV2:
         self.reset()
 
 
-    # ========================================================
-    # PARKED CAR
-    # ========================================================
+
 
     def create_parked_car(self, slot):
 
@@ -132,16 +115,11 @@ class ParkingLotV2:
         )
 
 
-    # ========================================================
-    # START POSITION
-    # ========================================================
+
 
     def get_start_position(self):
 
-        # ----------------------------------------------------
-        # LEVEL 0
-        # potpuno isti start
-        # ----------------------------------------------------
+
 
         if self.start_level == 0:
 
@@ -150,10 +128,7 @@ class ParkingLotV2:
             angle = 90.0
 
 
-        # ----------------------------------------------------
-        # LEVEL 1
-        # mala randomizacija
-        # ----------------------------------------------------
+
 
         elif self.start_level == 1:
 
@@ -182,10 +157,7 @@ class ParkingLotV2:
             )
 
 
-        # ----------------------------------------------------
-        # LEVEL 2
-        # veca randomizacija
-        # ----------------------------------------------------
+
 
         else:
 
@@ -221,9 +193,7 @@ class ParkingLotV2:
         )
 
 
-    # ========================================================
-    # RESET
-    # ========================================================
+
 
     def reset(self):
 
@@ -233,9 +203,7 @@ class ParkingLotV2:
         self.stuck_counter = 0
 
 
-        # ====================================================
-        # RANDOM SLOBODNO MESTO
-        # ====================================================
+
 
         self.target_slot_index = (
             random.randrange(
@@ -252,9 +220,7 @@ class ParkingLotV2:
         )
 
 
-        # ====================================================
-        # SVA OSTALA MESTA SU ZAUZETA
-        # ====================================================
+
 
         self.obstacles = []
 
@@ -276,9 +242,7 @@ class ParkingLotV2:
             )
 
 
-        # ====================================================
-        # AUTO
-        # ====================================================
+
 
         (
             start_x,
@@ -304,9 +268,7 @@ class ParkingLotV2:
         self.car.parked = False
 
 
-        # ====================================================
-        # HISTORY
-        # ====================================================
+
 
         self.previous_nav_distance = (
             self.distance_to_navigation_target()
@@ -348,13 +310,7 @@ class ParkingLotV2:
         return self.get_state()
 
 
-    # ========================================================
-    # SLOT SIDE
-    #
-    # 0,1,2 = LEFT
-    # 3,4,5 = RIGHT
-    # 6,7 = TOP
-    # ========================================================
+
 
     def get_target_side(self):
 
@@ -367,9 +323,7 @@ class ParkingLotV2:
         return "TOP"
 
 
-    # ========================================================
-    # APPROACH POINT
-    # ========================================================
+
 
     def get_approach_point(self):
 
@@ -378,11 +332,7 @@ class ParkingLotV2:
         )
 
 
-        # ----------------------------------------------------
-        # LEVO
-        #
-        # Dodjemo prvo desno od mesta.
-        # ----------------------------------------------------
+
 
         if side == "LEFT":
 
@@ -394,11 +344,7 @@ class ParkingLotV2:
             )
 
 
-        # ----------------------------------------------------
-        # DESNO
-        #
-        # Dodjemo prvo levo od mesta.
-        # ----------------------------------------------------
+
 
         if side == "RIGHT":
 
@@ -410,11 +356,7 @@ class ParkingLotV2:
             )
 
 
-        # ----------------------------------------------------
-        # GORE
-        #
-        # Dodjemo ispod mesta.
-        # ----------------------------------------------------
+
 
         return (
             float(
@@ -424,9 +366,7 @@ class ParkingLotV2:
         )
 
 
-    # ========================================================
-    # NAVIGATION TARGET
-    # ========================================================
+
 
     def get_navigation_target(self):
 
@@ -445,9 +385,7 @@ class ParkingLotV2:
         return self.get_approach_point()
 
 
-    # ========================================================
-    # NAV DISTANCE
-    # ========================================================
+
 
     def distance_to_navigation_target(self):
 
@@ -474,9 +412,7 @@ class ParkingLotV2:
         )
 
 
-    # ========================================================
-    # TARGET CENTER DISTANCE
-    # ========================================================
+
 
     def distance_to_parking(self):
 
@@ -498,14 +434,7 @@ class ParkingLotV2:
         )
 
 
-    # ========================================================
-    # HORIZONTAL ANGLE ERROR
-    #
-    # Parking mesta su horizontalna.
-    #
-    # 0 stepeni i 180 stepeni prihvatamo kao pravilno
-    # parkiranje.
-    # ========================================================
+
 
     def horizontal_angle_error(self):
 
@@ -545,9 +474,6 @@ class ParkingLotV2:
         return error_180
 
 
-    # ========================================================
-    # COLLISION
-    # ========================================================
 
     def check_collision(self):
 
@@ -556,9 +482,7 @@ class ParkingLotV2:
         )
 
 
-        # ----------------------------------------------------
-        # WALL
-        # ----------------------------------------------------
+
 
         for x, y in corners:
 
@@ -572,9 +496,7 @@ class ParkingLotV2:
                 return True
 
 
-        # ----------------------------------------------------
-        # PARKED CARS
-        # ----------------------------------------------------
+
 
         for obstacle in self.obstacles:
 
@@ -607,9 +529,7 @@ class ParkingLotV2:
         return False
 
 
-    # ========================================================
-    # CORNERS INSIDE TARGET
-    # ========================================================
+
 
     def corners_inside_parking(self):
 
@@ -629,9 +549,7 @@ class ParkingLotV2:
         return count
 
 
-    # ========================================================
-    # SUCCESS
-    # ========================================================
+
 
     def check_parking(self):
 
@@ -660,13 +578,7 @@ class ParkingLotV2:
         return True
 
 
-    # ========================================================
-    # SEMANTIC SENSOR TYPES
-    #
-    # 0.0 = nothing
-    # 0.5 = wall
-    # 1.0 = parked car
-    # ========================================================
+
 
     def get_semantic_sensor_types(self):
 
@@ -710,9 +622,6 @@ class ParkingLotV2:
                 )
 
 
-                # --------------------------------------------
-                # WALL
-                # --------------------------------------------
 
                 if (
                     sensor_x < 20
@@ -725,9 +634,7 @@ class ParkingLotV2:
                     break
 
 
-                # --------------------------------------------
-                # PARKED CAR
-                # --------------------------------------------
+
 
                 hit_car = False
 
@@ -756,13 +663,7 @@ class ParkingLotV2:
         return result
 
 
-    # ========================================================
-    # SEMANTIC PROXIMITY
-    #
-    # + = parked car
-    # - = wall
-    # 0 = nothing
-    # ========================================================
+
 
     def get_semantic_sensor_features(self):
 
@@ -815,9 +716,6 @@ class ParkingLotV2:
         return features
 
 
-    # ========================================================
-    # SLOT GEOMETRY
-    # ========================================================
 
     def get_slot_geometry(self):
 
@@ -849,9 +747,7 @@ class ParkingLotV2:
         )
 
 
-        # ====================================================
-        # NORMALIZED GAPS
-        # ====================================================
+
 
         left_gap = (
             car_left
@@ -944,9 +840,7 @@ class ParkingLotV2:
         }
 
 
-    # ========================================================
-    # OUTSIDE ERROR
-    # ========================================================
+
 
     def get_outside_error(
         self,
@@ -991,14 +885,7 @@ class ParkingLotV2:
         )
 
 
-    # ========================================================
-    # STATE = 31
-    #
-    # 9 navigation
-    # 8 distance
-    # 8 semantic
-    # 6 slot geometry
-    # ========================================================
+
 
     def get_state(self):
 
@@ -1064,9 +951,7 @@ class ParkingLotV2:
         ]
 
 
-        # ====================================================
-        # 8 DISTANCE SENSORS
-        # ====================================================
+
 
         state.extend(
             self.car.get_sensor_readings(
@@ -1075,18 +960,13 @@ class ParkingLotV2:
         )
 
 
-        # ====================================================
-        # 8 SEMANTIC
-        # ====================================================
 
         state.extend(
             self.get_semantic_sensor_features()
         )
 
 
-        # ====================================================
-        # 6 SLOT GEOMETRY
-        # ====================================================
+
 
         geometry = (
             self.get_slot_geometry()
@@ -1124,9 +1004,6 @@ class ParkingLotV2:
         return state
 
 
-    # ========================================================
-    # APPROACH REACHED
-    # ========================================================
 
     def check_approach_reached(self):
 
@@ -1158,9 +1035,7 @@ class ParkingLotV2:
         )
 
 
-    # ========================================================
-    # STEP
-    # ========================================================
+
 
     def step(self, action):
 
@@ -1216,18 +1091,13 @@ class ParkingLotV2:
         )
 
 
-        # ====================================================
-        # ACTION
-        # ====================================================
 
         self.car.apply_action(
             action
         )
 
 
-        # ====================================================
-        # TERMINAL CHECK
-        # ====================================================
+
 
         collision = (
             self.check_collision()
@@ -1244,17 +1114,13 @@ class ParkingLotV2:
             )
 
 
-        # ====================================================
-        # BASE REWARD
-        # ====================================================
+
 
         reward = -0.02
         done = False
 
 
-        # ====================================================
-        # CRASH
-        # ====================================================
+
 
         if collision:
 
@@ -1271,9 +1137,7 @@ class ParkingLotV2:
             )
 
 
-        # ====================================================
-        # SUCCESS
-        # ====================================================
+
 
         if parked:
 
@@ -1290,9 +1154,7 @@ class ParkingLotV2:
             )
 
 
-        # ====================================================
-        # APPROACH -> PARKING STAGE
-        # ====================================================
+
 
         if (
             not self.parking_stage
@@ -1305,18 +1167,13 @@ class ParkingLotV2:
             reward += 12.0
 
 
-            # nav target se upravo promenio,
-            # pa ne koristimo stari/new distance
-            # preko promene stage-a.
+
 
             old_nav_distance = (
                 self.distance_to_navigation_target()
             )
 
 
-        # ====================================================
-        # NAVIGATION PROGRESS
-        # ====================================================
 
         new_nav_distance = (
             self.distance_to_navigation_target()
@@ -1335,9 +1192,7 @@ class ParkingLotV2:
         )
 
 
-        # ====================================================
-        # SAFETY AROUND PARKED CARS
-        # ====================================================
+
 
         distances = (
             self.car.get_sensor_readings(
@@ -1371,7 +1226,7 @@ class ParkingLotV2:
             )
 
 
-            # Tek kad je stvarno blizu.
+
             if proximity > 0.72:
 
                 reward -= (
@@ -1390,15 +1245,7 @@ class ParkingLotV2:
                 )
 
 
-        # ====================================================
-        # PARKING GEOMETRY
-        #
-        # Samo blizu targeta.
-        #
-        # Bitno:
-        # NEMA ogromne konstantne nagrade svaki frame.
-        # Nagradjujemo POBOLJSANJE.
-        # ====================================================
+
 
         center_distance = (
             self.distance_to_parking()
@@ -1469,12 +1316,7 @@ class ParkingLotV2:
             )
 
 
-            # -----------------------------------------------
-            # Promena broja uglova unutra.
-            #
-            # Nagrada samo kad ZAISTA udje jos jedan ugao.
-            # Nema +6 svaki frame dok stoji.
-            # -----------------------------------------------
+
 
             corner_change = (
                 new_corners
@@ -1488,9 +1330,7 @@ class ParkingLotV2:
             )
 
 
-        # ====================================================
-        # SLOW DOWN NEAR TARGET
-        # ====================================================
+
 
         if center_distance < 110:
 
@@ -1501,10 +1341,7 @@ class ParkingLotV2:
                 ) * 0.20
 
 
-        # ====================================================
-        # AKO JE POTPUNO UNUTRA,
-        # ali jos nije dovoljno spor
-        # ====================================================
+
 
         if new_corners == 4:
 
@@ -1517,9 +1354,7 @@ class ParkingLotV2:
                 reward -= 0.30
 
 
-        # ====================================================
-        # STUCK
-        # ====================================================
+
 
         moved = math.sqrt(
 
@@ -1563,9 +1398,7 @@ class ParkingLotV2:
             reward -= 0.20
 
 
-        # ====================================================
-        # TIMEOUT
-        # ====================================================
+
 
         if self.steps >= self.max_steps:
 
@@ -1574,9 +1407,7 @@ class ParkingLotV2:
             done = True
 
 
-        # ====================================================
-        # HISTORY
-        # ====================================================
+
 
         self.previous_nav_distance = (
             new_nav_distance
@@ -1602,9 +1433,7 @@ class ParkingLotV2:
         )
 
 
-# ============================================================
-# TEST
-# ============================================================
+
 
 if __name__ == "__main__":
 
