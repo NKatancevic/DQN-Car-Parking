@@ -7,9 +7,7 @@ WIDTH = 900
 HEIGHT = 600
 
 
-# =========================================================
-# CAR
-# =========================================================
+
 
 class Car:
 
@@ -32,40 +30,30 @@ class Car:
         self.crashed = False
         self.parked = False
 
-        # Ostavljamo ISTIH 5 senzora
-        # da postojeći model ostane kompatibilan.
-        self.sensor_angles = [
-            -90,  # levo
-            -45,  # levo napred
-            0,  # napred
-            45,  # desno napred
-            90,  # desno
 
-            135,  # desno nazad
-            180,  # nazad
-            -135  # levo nazad
+        self.sensor_angles = [
+            -90,  
+            -45,  
+            0, 
+            45,  
+            90,  
+
+            135, 
+            180,  
+            -135 
         ]
 
         self.sensor_max_distance = 180
 
 
-    # -----------------------------------------------------
-    # Akcija
-    # -----------------------------------------------------
+
 
     def apply_action(self, action):
 
         if self.crashed or self.parked:
             return
 
-        # 0 = ništa
-        # 1 = napred
-        # 2 = rikverc
-        # 3 = napred + levo
-        # 4 = napred + desno
-        # 5 = rikverc + levo
-        # 6 = rikverc + desno
-        # 7 = kočenje
+
 
         if action in [1, 3, 4]:
 
@@ -121,9 +109,7 @@ class Car:
         )
 
 
-        # -------------------------------------------------
-        # Skretanje
-        # -------------------------------------------------
+
 
         if (
             action in [3, 5]
@@ -150,9 +136,7 @@ class Car:
         self.angle %= 360
 
 
-        # -------------------------------------------------
-        # Kretanje
-        # -------------------------------------------------
+
 
         rad = math.radians(
             self.angle
@@ -169,9 +153,7 @@ class Car:
         )
 
 
-    # -----------------------------------------------------
-    # Rotirani uglovi auta
-    # -----------------------------------------------------
+
 
     def get_corners(self):
 
@@ -232,9 +214,6 @@ class Car:
         return corners
 
 
-    # -----------------------------------------------------
-    # Senzori
-    # -----------------------------------------------------
 
     def get_sensor_readings(
         self,
@@ -282,7 +261,7 @@ class Car:
                 hit = False
 
 
-                # Granice parkinga
+
                 if (
                     sensor_x < 20
                     or sensor_x > WIDTH - 20
@@ -294,7 +273,6 @@ class Car:
                     hit = True
 
 
-                # Parkirani automobili / prepreke
                 if not hit:
 
                     for obstacle in obstacles:
@@ -323,9 +301,7 @@ class Car:
 
 
 
-# =========================================================
-# REAL PARKING ENV
-# =========================================================
+
 
 class RealParkingEnv:
 
@@ -342,12 +318,7 @@ class RealParkingEnv:
         self.max_steps = 600
 
 
-        # -------------------------------------------------
-        # Pet realnih parking mesta
-        #
-        # Ulaz je sa LEVE strane.
-        # Automobili se parkiraju horizontalno.
-        # -------------------------------------------------
+
 
         self.parking_slots = [
 
@@ -397,7 +368,6 @@ class RealParkingEnv:
         )
 
 
-        # Pravougaonici drugih automobila
         self.obstacles = []
 
 
@@ -413,9 +383,6 @@ class RealParkingEnv:
         self.reset()
 
 
-    # =====================================================
-    # Difficulty
-    # =====================================================
 
     def set_difficulty(
         self,
@@ -425,9 +392,7 @@ class RealParkingEnv:
         self.difficulty = difficulty
 
 
-    # =====================================================
-    # Parkirani automobili
-    # =====================================================
+
 
     def create_parked_car(
         self,
@@ -443,22 +408,13 @@ class RealParkingEnv:
         )
 
 
-    # =====================================================
-    # Reset
-    # =====================================================
 
     def reset(self):
 
         self.steps = 0
 
 
-        # -------------------------------------------------
-        # EASY
-        #
-        # Srednja tri mesta.
-        # Auto kreće relativno blizu i približno
-        # poravnat sa ciljem.
-        # -------------------------------------------------
+
 
         if self.difficulty == "easy":
 
@@ -496,11 +452,7 @@ class RealParkingEnv:
             self.max_steps = 450
 
 
-        # -------------------------------------------------
-        # MEDIUM
-        #
-        # Više odstupanja po Y i uglu.
-        # -------------------------------------------------
+
 
         elif self.difficulty == "medium":
 
@@ -547,12 +499,7 @@ class RealParkingEnv:
             self.max_steps = 550
 
 
-        # -------------------------------------------------
-        # HARD
-        #
-        # Bilo koje mesto.
-        # Znatno širi start i ugao.
-        # -------------------------------------------------
+  
 
         else:
 
@@ -592,9 +539,7 @@ class RealParkingEnv:
             self.max_steps = 650
 
 
-        # -------------------------------------------------
-        # Target parking
-        # -------------------------------------------------
+
 
         self.parking_rect = (
             self.parking_slots[
@@ -603,9 +548,7 @@ class RealParkingEnv:
         )
 
 
-        # -------------------------------------------------
-        # Ostala mesta zauzimaju parkirani automobili
-        # -------------------------------------------------
+
 
         self.obstacles = []
 
@@ -633,9 +576,7 @@ class RealParkingEnv:
             )
 
 
-        # -------------------------------------------------
-        # Kreiramo naš automobil
-        # -------------------------------------------------
+
 
         self.car = Car(
             start_x,
@@ -652,9 +593,7 @@ class RealParkingEnv:
         self.car.parked = False
 
 
-        # -------------------------------------------------
-        # Reward history
-        # -------------------------------------------------
+
 
         self.previous_distance = (
             self.distance_to_parking()
@@ -680,9 +619,7 @@ class RealParkingEnv:
         return self.get_state()
 
 
-    # =====================================================
-    # Distance
-    # =====================================================
+
 
     def distance_to_parking(self):
 
@@ -703,9 +640,7 @@ class RealParkingEnv:
         )
 
 
-    # =====================================================
-    # Angle difference
-    # =====================================================
+
 
     def angle_difference(self):
 
@@ -721,9 +656,7 @@ class RealParkingEnv:
         )
 
 
-    # =====================================================
-    # Parking corners
-    # =====================================================
+
 
     def corners_inside_parking(self):
 
@@ -748,9 +681,6 @@ class RealParkingEnv:
         return inside
 
 
-    # =====================================================
-    # Collision
-    # =====================================================
 
     def check_collision(self):
 
@@ -759,7 +689,7 @@ class RealParkingEnv:
         )
 
 
-        # Granice sveta
+
         for x, y in corners:
 
             if (
@@ -772,7 +702,7 @@ class RealParkingEnv:
                 return True
 
 
-        # Parkirani automobili
+
         for obstacle in self.obstacles:
 
             for x, y in corners:
@@ -785,8 +715,7 @@ class RealParkingEnv:
                     return True
 
 
-            # dodatno proveravamo i
-            # centar našeg automobila
+
             if obstacle.collidepoint(
                 self.car.x,
                 self.car.y
@@ -798,9 +727,7 @@ class RealParkingEnv:
         return False
 
 
-    # =====================================================
-    # Parking success
-    # =====================================================
+
 
     def check_parking(self):
 
@@ -832,13 +759,7 @@ class RealParkingEnv:
         return True
 
 
-    # =====================================================
-    # State
-    #
-    # FINALNI STATE: 17 ULAZA.
-    #
-    # 9 osnovnih + 8 senzora.
-    # =====================================================
+
 
     def get_state(self):
 
@@ -926,16 +847,12 @@ class RealParkingEnv:
         return state
 
 
-    # =====================================================
-    # Step
-    # =====================================================
+
 
     def step(self, action):
 
         self.steps += 1
 
-        # Brzinu pre akcije cuvamo samo radi dijagnostike
-        # i eventualnog buduceg reward shaping-a.
         previous_speed = abs(self.car.speed)
 
         self.car.apply_action(
@@ -954,14 +871,11 @@ class RealParkingEnv:
                 self.check_parking()
             )
 
-        # Mala kazna po koraku tera agenta da zavrsi manevar,
-        # ali nije toliko jaka da ga tera na agresivnu voznju.
+
         reward = -0.02
         done = False
 
-        # -------------------------------------------------
-        # 1. Napredak ka centru parking mesta
-        # -------------------------------------------------
+
 
         current_distance = (
             self.distance_to_parking()
@@ -981,9 +895,7 @@ class RealParkingEnv:
             current_distance
         )
 
-        # -------------------------------------------------
-        # 2. Napredak u poravnanju ugla
-        # -------------------------------------------------
+
 
         current_angle_difference = (
             self.angle_difference()
@@ -1003,13 +915,7 @@ class RealParkingEnv:
             current_angle_difference
         )
 
-        # -------------------------------------------------
-        # 3. Lateralno poravnanje po Y osi
-        #
-        # Za razliku od stare verzije ne uslovljavamo ovo sa
-        # x > 500. Agent dobija simetrican signal i sa gornje
-        # i sa donje strane parking mesta.
-        # -------------------------------------------------
+
 
         current_lateral_error = abs(
             self.car.y
@@ -1030,12 +936,7 @@ class RealParkingEnv:
             current_lateral_error
         )
 
-        # -------------------------------------------------
-        # 4. Uglovi auta unutar parking mesta
-        #
-        # Ovo je veoma jak i direktan signal da je automobil
-        # geometrijski sve bolje postavljen u slot.
-        # -------------------------------------------------
+
 
         current_corners = (
             self.corners_inside_parking()
@@ -1055,13 +956,7 @@ class RealParkingEnv:
             current_corners
         )
 
-        # -------------------------------------------------
-        # 5. Kontrola brzine blizu cilja
-        #
-        # Ne dajemo pozitivan reward za samo stajanje, jer bi
-        # agent mogao da nauci da kampuje. Umesto toga kaznimo
-        # samo preveliku brzinu kada je vec blizu parking mesta.
-        # -------------------------------------------------
+
 
         if current_distance < 120:
 
@@ -1075,10 +970,7 @@ class RealParkingEnv:
                     current_speed - 1.0
                 ) * 0.08
 
-        # -------------------------------------------------
-        # 6. Delimicno je u slotu, ali je stao bez pravilnog
-        #    parkiranja.
-        # -------------------------------------------------
+
 
         if (
             abs(self.car.speed) < 0.1
@@ -1093,18 +985,7 @@ class RealParkingEnv:
 
             reward -= 0.10
 
-        # -------------------------------------------------
-        # VAZNO:
-        # NEMA vise proximity kazne na osnovu min senzora.
-        #
-        # U realnom parkingu auto mora da bude blizu drugih
-        # vozila. Senzori su informacija za mrezu, dok stvarni
-        # sudar vec ima veliku terminalnu kaznu.
-        # -------------------------------------------------
 
-        # -------------------------------------------------
-        # Terminalni reward
-        # -------------------------------------------------
 
         if collision:
 
