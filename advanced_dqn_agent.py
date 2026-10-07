@@ -7,10 +7,6 @@ import torch.nn as nn
 import torch.optim as optim
 
 
-# =========================================================
-# DUELING DQN NETWORK
-# =========================================================
-
 class DuelingDQN(nn.Module):
 
     def __init__(
@@ -21,9 +17,7 @@ class DuelingDQN(nn.Module):
 
         super().__init__()
 
-        # -------------------------------------------------
-        # Shared feature extractor
-        # -------------------------------------------------
+
 
         self.feature = nn.Sequential(
 
@@ -43,12 +37,7 @@ class DuelingDQN(nn.Module):
         )
 
 
-        # -------------------------------------------------
-        # VALUE STREAM
-        #
-        # Procena:
-        # "Koliko je ovo stanje dobro?"
-        # -------------------------------------------------
+
 
         self.value_stream = nn.Sequential(
 
@@ -66,13 +55,7 @@ class DuelingDQN(nn.Module):
         )
 
 
-        # -------------------------------------------------
-        # ADVANTAGE STREAM
-        #
-        # Procena:
-        # "Koliko je svaka akcija bolja/gora
-        # od prosečne akcije?"
-        # -------------------------------------------------
+
 
         self.advantage_stream = nn.Sequential(
 
@@ -108,16 +91,7 @@ class DuelingDQN(nn.Module):
         )
 
 
-        # -------------------------------------------------
-        # Dueling kombinacija
-        #
-        # Q(s,a) =
-        # V(s)
-        # +
-        # A(s,a)
-        # -
-        # mean(A)
-        # -------------------------------------------------
+
 
         q_values = (
             value
@@ -134,9 +108,7 @@ class DuelingDQN(nn.Module):
         return q_values
 
 
-# =========================================================
-# REPLAY BUFFER
-# =========================================================
+
 
 class ReplayBuffer:
 
@@ -242,9 +214,7 @@ class ReplayBuffer:
         )
 
 
-# =========================================================
-# ADVANCED AGENT
-# =========================================================
+
 
 class AdvancedDQNAgent:
 
@@ -265,9 +235,7 @@ class AdvancedDQNAgent:
         self.action_size = action_size
 
 
-        # -------------------------------------------------
-        # Hyperparameters
-        # -------------------------------------------------
+
 
         self.gamma = gamma
 
@@ -286,9 +254,7 @@ class AdvancedDQNAgent:
         self.lr = lr
 
 
-        # -------------------------------------------------
-        # Device
-        # -------------------------------------------------
+
 
         self.device = torch.device(
 
@@ -306,9 +272,6 @@ class AdvancedDQNAgent:
         )
 
 
-        # -------------------------------------------------
-        # Online network
-        # -------------------------------------------------
 
         self.model = DuelingDQN(
             state_size,
@@ -318,9 +281,6 @@ class AdvancedDQNAgent:
         )
 
 
-        # -------------------------------------------------
-        # Target network
-        # -------------------------------------------------
 
         self.target_model = DuelingDQN(
             state_size,
@@ -330,13 +290,11 @@ class AdvancedDQNAgent:
         )
 
 
-        # Initial sync
+
         self.update_target_model()
 
 
-        # -------------------------------------------------
-        # Optimizer
-        # -------------------------------------------------
+
 
         self.optimizer = (
             optim.Adam(
@@ -346,36 +304,25 @@ class AdvancedDQNAgent:
         )
 
 
-        # -------------------------------------------------
-        # Loss
-        #
-        # Huber loss
-        # -------------------------------------------------
+
 
         self.loss_function = (
             nn.SmoothL1Loss()
         )
 
 
-        # -------------------------------------------------
-        # Replay
-        # -------------------------------------------------
 
         self.memory = ReplayBuffer(
             replay_capacity
         )
 
 
-        # -------------------------------------------------
-        # Counters
-        # -------------------------------------------------
+
 
         self.training_steps = 0
 
 
-    # =====================================================
-    # ACTION
-    # =====================================================
+
 
     def choose_action(
         self,
@@ -383,9 +330,7 @@ class AdvancedDQNAgent:
         greedy=False
     ):
 
-        # -------------------------------------------------
-        # Exploration
-        # -------------------------------------------------
+
 
         if (
             not greedy
@@ -399,9 +344,7 @@ class AdvancedDQNAgent:
             )
 
 
-        # -------------------------------------------------
-        # Greedy
-        # -------------------------------------------------
+
 
         state_tensor = torch.tensor(
             state,
@@ -433,9 +376,7 @@ class AdvancedDQNAgent:
         )
 
 
-    # =====================================================
-    # MEMORY
-    # =====================================================
+
 
     def remember(
         self,
@@ -455,9 +396,7 @@ class AdvancedDQNAgent:
         )
 
 
-    # =====================================================
-    # TRAIN STEP
-    # =====================================================
+
 
     def train_step(
         self
@@ -523,9 +462,7 @@ class AdvancedDQNAgent:
         )
 
 
-        # -------------------------------------------------
-        # CURRENT Q
-        # -------------------------------------------------
+
 
         current_q = self.model(
             states
@@ -535,12 +472,6 @@ class AdvancedDQNAgent:
         )
 
 
-        # -------------------------------------------------
-        # DOUBLE DQN
-        #
-        # Online bira najbolju akciju.
-        # Target procenjuje njenu vrednost.
-        # -------------------------------------------------
 
         with torch.no_grad():
 
@@ -578,9 +509,7 @@ class AdvancedDQNAgent:
             )
 
 
-        # -------------------------------------------------
-        # LOSS
-        # -------------------------------------------------
+
 
         loss = self.loss_function(
             current_q,
@@ -588,18 +517,13 @@ class AdvancedDQNAgent:
         )
 
 
-        # -------------------------------------------------
-        # OPTIMIZATION
-        # -------------------------------------------------
 
         self.optimizer.zero_grad()
 
         loss.backward()
 
 
-        # -------------------------------------------------
-        # Gradient clipping
-        # -------------------------------------------------
+
 
         torch.nn.utils.clip_grad_norm_(
             self.model.parameters(),
@@ -618,9 +542,7 @@ class AdvancedDQNAgent:
         )
 
 
-    # =====================================================
-    # TARGET UPDATE
-    # =====================================================
+
 
     def update_target_model(
         self
@@ -633,9 +555,6 @@ class AdvancedDQNAgent:
         self.target_model.eval()
 
 
-    # =====================================================
-    # EPSILON
-    # =====================================================
 
     def decay_epsilon(
         self
@@ -672,9 +591,7 @@ class AdvancedDQNAgent:
         )
 
 
-    # =====================================================
-    # LR
-    # =====================================================
+
 
     def set_learning_rate(
         self,
@@ -693,9 +610,7 @@ class AdvancedDQNAgent:
             )
 
 
-    # =====================================================
-    # SAVE
-    # =====================================================
+
 
     def save(
         self,
@@ -730,9 +645,7 @@ class AdvancedDQNAgent:
         )
 
 
-    # =====================================================
-    # LOAD
-    # =====================================================
+
 
     def load(
         self,
@@ -746,9 +659,7 @@ class AdvancedDQNAgent:
         )
 
 
-        # -------------------------------------------------
-        # Full checkpoint
-        # -------------------------------------------------
+
 
         if (
             isinstance(
@@ -819,9 +730,7 @@ class AdvancedDQNAgent:
                 )
 
 
-        # -------------------------------------------------
-        # Pure state_dict
-        # -------------------------------------------------
+
 
         else:
 
